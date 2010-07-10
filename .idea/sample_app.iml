@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RUBY_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="RailsFacetType" name="Ruby on Rails">
+      <configuration>
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_SUPPORT_REMOVED" VALUE="false" />
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_TESTS_SOURCES_PATCHED" VALUE="true" />
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_APPLICATION_ROOT" VALUE="$MODULE_DIR$" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="GemRequirementsHolder" version="2">
+    <requirement>
+      <requirement>
+        <dependency name="actionmailer" version="0" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="vendor/actionpack/test/controller/assert_select_test.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="activesupport" version="0" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="vendor/railties/lib/rails_generator.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="builder" version="2.1.2" bound="LATEST_IN_BRANCH" git="false" />
+      </requirement>
+      <source from="vendor/activesupport/lib/active_support/vendor.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="memcache-client" version="1.5.1" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="vendor/activesupport/lib/active_support/vendor.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="rails" version="0" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="config/boot.rb" />
+      <source from="vendor/railties/environments/boot.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="rmagick" version="0" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="Downloads/joshuaclayton-blueprint-css-6a5a2e2/lib/blueprint/grid_builder.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="rspec-rails" version="1.3.2" bound="GREATER_OR_EQUAL" lib="false" git="false" />
+      </requirement>
+      <source from="config/environments/test.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="ruby-prof" version="0.6.1" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="vendor/actionpack/lib/action_controller/request_profiler.rb" />
+      <source from="vendor/activesupport/lib/active_support/testing/performance.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="sqlite3-ruby" version="0" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="config/database.yml" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="test-unit" version="1.2.3" bound="EQUAL" git="false" />
+      </requirement>
+      <source from="lib/tasks/rspec.rake" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="text-format" version="0.6.3" bound="GREATER_OR_EQUAL" git="false" />
+      </requirement>
+      <source from="vendor/actionmailer/lib/action_mailer/vendor.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="tmail" version="1.2.3" bound="LATEST_IN_BRANCH" git="false" />
+      </requirement>
+      <source from="vendor/actionmailer/lib/action_mailer/vendor.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="tzinfo" version="0.3.12" bound="LATEST_IN_BRANCH" git="false" />
+      </requirement>
+      <source from="vendor/activesupport/lib/active_support/vendor.rb" />
+    </requirement>
+    <requirement>
+      <requirement>
+        <dependency name="xml-simple" version="1.0.11" bound="LATEST_IN_BRANCH" git="false" />
+      </requirement>
+      <source from="vendor/activesupport/lib/active_support/vendor.rb" />
+    </requirement>
+  </component>
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/actionmailer/test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/actionpack/test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/activemodel/test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/activerecord/test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/activeresource/test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/activesupport/test" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/rails/railties/test" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] rspec-rails (v1.3.2, /var/lib/gems/1.8/gems/rspec-rails-1.3.2)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] rspec (v1.3.0, /var/lib/gems/1.8/gems/rspec-1.3.0)" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="[gem] rack (v1.2.1, /var/lib/gems/1.8/gems/rack-1.2.1)" level="application" />
+  </component>
+</module>
+
