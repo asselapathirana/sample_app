@@ -2,10 +2,17 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Ruby on Rails Tutorial Sample App | <%= @title %></title>
-  </head>
+    <title><%= title %></title>
+   <%= render :file=>'layouts/_stylesheets' %>
+   </head>
   <body>
-    <%= yield %>
+    <div class="container">
+     <%= render :file=>'layouts/_header' %>
+      <div id="content" class="round">
+        <%= yield %>
+      </div>
+        <%= render :file=>'layouts/_footer' %>
+    </div>
   </body>
 </html>
 
