@@ -101,9 +101,13 @@ describe "get 'show'" do
         post :create, :user => @attr
         response.should redirect_to(user_path(@user))
       end   
-      it "sould have a welcome message" do
+      it "should have a welcome message" do
         post :create, :user=>@attr
         flash[:success].should=~/welcome/i 
+      end
+      it "should sign the user in" do
+        post :create, :user=>@attr
+        controller.should be_signed_in
       end
     end
   end
