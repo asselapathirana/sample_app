@@ -111,4 +111,14 @@ describe "get 'show'" do
       end
     end
   end
+  describe "GET 'edit'" do
+      before(:each) do
+        @user=Factory(:user)
+        test_sign_in(@user)
+      end
+      it "should be successful" do
+        get :edit, :id=>@user
+        response.should be_sucess
+      end
+  end
 end
