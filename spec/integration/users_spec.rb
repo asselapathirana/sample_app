@@ -51,11 +51,23 @@ describe "Users" do
         fill_in :email,    :with => user.email
         fill_in :password, :with => user.password
         click_button
-        #controller.should be_signed_in
         controller.signed_in?.should be_true
         click_link "Sign out"
         controller.signed_in?.should be_false 
       end
+     it "should have session " do
+        user=Factory(:user)
+        visit signin_path
+        fill_in :email,    :with => user.email
+        fill_in :password, :with => user.password
+        controller.session[:user].should be_nil
+        click_button
+        controller.session[:user].should_not be_nil
+        click_link "Sign out"
+        controller.session[:user].should be_nil
+        puts "Still there is no test to emulate browser re-open to validate losing the session"
+     end
+      
     end
   end
 end
