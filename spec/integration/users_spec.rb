@@ -44,12 +44,20 @@ describe "Users" do
     describe "success" do
       it "should sign a user in and out" do
         user = Factory(:user)
+<<<<<<< HEAD
         integration_sign_in(user)
                 #controller.should be_signed_in
+=======
+        visit signin_path
+        fill_in :email,    :with => user.email
+        fill_in :password, :with => user.password
+        click_button
+>>>>>>> sessions_4_cookie
         controller.signed_in?.should be_true
         click_link "Sign out"
         controller.signed_in?.should be_false 
       end
+<<<<<<< HEAD
   
       describe " login, logout and then login back as same user" do
         before(:each) do
@@ -68,6 +76,21 @@ describe "Users" do
 
          end
       end
+=======
+     it "should have session " do
+        user=Factory(:user)
+        visit signin_path
+        fill_in :email,    :with => user.email
+        fill_in :password, :with => user.password
+        controller.session[:user].should be_nil
+        click_button
+        controller.session[:user].should_not be_nil
+        click_link "Sign out"
+        controller.session[:user].should be_nil
+        puts "Still there is no test to emulate browser re-open to validate losing the session"
+     end
+      
+>>>>>>> sessions_4_cookie
     end
   end
 end

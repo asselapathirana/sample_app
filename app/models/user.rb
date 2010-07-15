@@ -35,10 +35,17 @@ class User < ActiveRecord::Base
   def has_password?(submitted_password)
      encrypted_password == encrypt(submitted_password)
   end
+<<<<<<< HEAD
   def remember_me!
     self.remember_token = encrypt("#{salt}--#{id}--#{Time.now.utc}--#{Time.now.usec}")
     save_without_validation
   end
+=======
+  #def remember_me!
+  #  self.remember_token = encrypt("#{salt}--#{id}--#{Time.now.utc}")
+  #  save_without_validation
+  #end
+>>>>>>> sessions_4_cookie
   
   def self.authenticate(email,submitted_password)
     user=find_by_email(email)

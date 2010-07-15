@@ -2,6 +2,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  include SslRequirement
   helper :all # include all helpers, all the time
   include SessionsHelper
   # so that it will be included also on controllers
