@@ -35,10 +35,7 @@ describe "Users" do
       
     describe "failure" do
       it "should not sign a user in" do
-        visit signin_path
-        fill_in :email,    :with => ""
-        fill_in :password, :with => ""
-        click_button
+        integration_sign_in(User.new(:email=>"",:password=>""))
         response.should render_template('sessions/new')
         response.should have_tag("div.flash.error", /invalid/i)
       end
@@ -47,14 +44,29 @@ describe "Users" do
     describe "success" do
       it "should sign a user in and out" do
         user = Factory(:user)
-        visit signin_path
-        fill_in :email,    :with => user.email
-        fill_in :password, :with => user.password
-        click_button
-        #controller.should be_signed_in
+        integration_sign_in(user)
+                #controller.should be_signed_in
         controller.signed_in?.should be_true
         click_link "Sign out"
         controller.signed_in?.should be_false 
+      end
+  
+      describe " login, logout and then login back as same user" do
+        before(:each) do
+            @user = Factory(:user)
+            integration_sign_in(@user)
+            @cookie=controller.current_user.remember_token
+            click_link "Sign out"
+            #sleep(2)
+        end  
+
+         it "should have a new cookie" do
+           integration_sign_in(@user)
+           puts @cookie
+           puts controller.current_user.remember_token 
+           controller.current_user.remember_token.should_not  eql(@cookie)
+
+         end
       end
     end
   end
