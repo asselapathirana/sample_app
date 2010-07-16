@@ -45,29 +45,35 @@ describe "Users" do
     end
 
     describe "success" do
-      it "should sign a user in and out" do
+      before(:each) do
         user = Factory(:user)
         visit signin_path
         fill_in :email,    :with => user.email
         fill_in :password, :with => user.password
         click_button
+      end 
+      it "should sign a user in and out" do
         controller.signed_in?.should be_true
         click_link "Sign out"
         controller.signed_in?.should be_false 
       end
      it "should have session " do
-        user=Factory(:user)
-        visit signin_path
-        fill_in :email,    :with => user.email
-        fill_in :password, :with => user.password
-        controller.session[:user].should be_nil
-        click_button
         controller.session[:user].should_not be_nil
         click_link "Sign out"
         controller.session[:user].should be_nil
         puts "Still there is no test to emulate browser re-open to validate losing the session"
      end
-      
+     describe " and try to access  " do
+       it " 'new' should redirect to root url" do
+         visit signup_path
+         response.should render_template('pages/home')
+       end
+       it " 'create' should redirect to root url" do
+         visit "users", :post, :users =>{:email=>"fox@box.com", :password=>"heeheehee", :password_confirmation=>"heeheehee", :name=>"boo bax"}
+         response.should render_template('pages/home')
+       end
+
+     end
     end
   end
 end

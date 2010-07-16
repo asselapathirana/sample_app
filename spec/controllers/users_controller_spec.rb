@@ -2,19 +2,18 @@ require 'spec_helper'
 
 describe UsersController do
   integrate_views
- 
- 
-describe "get 'show'" do
-  before(:each)do
-    @user=Factory(:user)
-    #Arrange for User.find(params[:id] to find right user
-    User.stub!(:find,@user.id).and_return(@user)
-  end
-  
-  it "should be successful" do
-    get :show, :id=>@user
-    response.should be_success
-  end
+
+  describe "get 'show'" do
+    before(:each)do
+      @user=Factory(:user)
+      #Arrange for User.find(params[:id] to find right user
+      User.stub!(:find,@user.id).and_return(@user)
+    end
+
+    it "should be successful" do
+      get :show, :id=>@user
+      response.should be_success
+    end
     it "should have the right title" do
       get :show, :id => @user
       response.should have_tag("title", /#{@user.name}/)
@@ -30,7 +29,7 @@ describe "get 'show'" do
       response.should have_tag("h2>img", :class => "gravatar")
     end
 
- end
+  end
 
   #Delete these examples and add some real ones
   it "should use UsersController" do
@@ -47,7 +46,7 @@ describe "get 'show'" do
       get 'new'
       response.should have_tag("title",/Sign up/)
     end
-    
+
     it "should have a name field" do
       get :new
       response.should have_tag("input[name=?][type=?]","user[name]","text")
@@ -66,17 +65,17 @@ describe "get 'show'" do
     end
 
   end
-  
+
   describe "POST 'create'" do
     describe "Failure" do
       before(:each) do
         @attr = { :name=>"", :email=>"", :password=>"",
-                  :password_confirmation=>""}
+          :password_confirmation=>""}
         @user = Factory.build(:user, @attr)
         User.stub!(:new).and_return(@user)
         @user.should_receive(:save).and_return(false)
       end
-        it "should have the right title" do
+      it "should have the right title" do
         post :create, :user => @attr
         response.should have_tag("title", /sign up/i)
       end
@@ -87,11 +86,11 @@ describe "get 'show'" do
       end
 
     end
-    
+
     describe "Success" do
-       before(:each) do
+      before(:each) do
         @attr = { :name => "New User", :email => "user@example.com",
-                  :password => "foobar", :password_confirmation => "foobar" }
+          :password => "foobar", :password_confirmation => "foobar" }
         @user = Factory(:user, @attr)
         User.stub!(:new).and_return(@user)
         @user.should_receive(:save).and_return(true)
@@ -112,15 +111,15 @@ describe "get 'show'" do
     end
   end
   describe "GET 'edit'" do
-      before(:each) do
-        @user=Factory(:user)
-        test_sign_in(@user)
-      end
-      it "should be successful" do
-        get :edit, :id=>@user
-        response.should be_success
-      end
-   it "should have the right title" do
+    before(:each) do
+      @user=Factory(:user)
+      test_sign_in(@user)
+    end
+    it "should be successful" do
+      get :edit, :id=>@user
+      response.should be_success
+    end
+    it "should have the right title" do
       get :edit, :id => @user
       response.should have_tag("title", /edit user/i)
     end
@@ -161,7 +160,7 @@ describe "get 'show'" do
 
       before(:each) do
         @attr = { :name => "New Name", :email => "user@example.org",
-                  :password => "barbaz", :password_confirmation => "barbaz" }
+          :password => "barbaz", :password_confirmation => "barbaz" }
         @user.should_receive(:update_attributes).and_return(true)
       end
 
@@ -176,7 +175,7 @@ describe "get 'show'" do
       end
     end
   end
-   describe "authentication of edit/update pages" do
+  describe "authentication of edit/update pages" do
 
     before(:each) do
       @user = Factory(:user)
@@ -195,13 +194,13 @@ describe "get 'show'" do
       end
     end
     describe "for signed-in users" do
-     
-     before(:each) do
+
+      before(:each) do
         wrong_user = Factory(:user, :email => "user@example.net")
         test_sign_in(wrong_user)
       end
-      
-            it "should require matching users for 'edit'" do
+
+      it "should require matching users for 'edit'" do
         get :edit, :id => @user
         response.should redirect_to(root_path)
       end
@@ -212,7 +211,8 @@ describe "get 'show'" do
       end
     end
   end
-    describe "GET 'index'" do
+  
+  describe "GET 'index'" do
 
     describe "for non-signed-in users" do
       it "should deny access" do
@@ -235,7 +235,7 @@ describe "get 'show'" do
         end
         User.should_receive(:paginate).and_return(@users.paginate)
       end
-          it "should paginate users" do
+      it "should paginate users" do
         get :index
         response.should have_tag("div.pagination")
         response.should have_tag("span", "&laquo; Previous")
@@ -260,9 +260,14 @@ describe "get 'show'" do
           response.should have_tag("li", user.name)
         end
       end
-    end
+
+      it "should not have any delete link" do
+        get :index
+        response.should_not have_tag("a[href*=?]", /users\/[0-9]+/i,'delete')
+      end
+    end 
   end
-    describe "DELETE 'destroy'" do
+  describe "DELETE 'destroy'" do
 
     before(:each) do
       @user = Factory(:user)
@@ -297,6 +302,38 @@ describe "get 'show'" do
         response.should redirect_to(users_path)
       end
     end
+   describe "as an admin user" do
+
+      before(:each) do
+        @admin = Factory(:user, :email => "admin@example.com", :admin => true)
+        test_sign_in(@admin)        
+      end
+
+      it "should destroy the user" do
+        delete :destroy, :id => @admin
+        response.should redirect_to(root_path)
+      end
+    end
   end
 
+
+  describe "for admin users" do 
+     before(:each) do
+        admin=Factory(:user,:email=>"admin@example.com", :admin=>true)
+        second = Factory(:user, :email => "another@example.com")
+        third  = Factory(:user, :email => "another@example.net")
+       @user = test_sign_in(admin)
+     end
+     it "index should have delete link for non-admin user list" do
+        get :index
+        response.should have_tag("a[href*=?]", /users\/2/i,'delete')
+        response.should have_tag("a[href*=?]", /users\/3/i,'delete')
+     end
+     it "index should NOT have delete link for admin listing" do
+        get :index
+        response.should_not have_tag("a[href*=?]", /users\/1/i,'delete')
+     end
+
+  end 
 end
+

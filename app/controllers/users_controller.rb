@@ -7,11 +7,21 @@ class UsersController < ApplicationController
     @users = User.paginate(:page=>params[:page])
   end
   def destroy
-    User.find(params[:id]).destroy
+    user=User.find(params[:id]) 
+    if user== current_user then 
+      redirect_to root_path
+      return 
+    end 
+    user.destroy
     flash[:success] = "User destroyed."
     redirect_to users_path
   end
   def new
+    if signed_in?  then 
+      redirect_to root_path
+      return
+    end
+  
     @title="Sign up"
     @user = User.new
   end
@@ -22,6 +32,10 @@ class UsersController < ApplicationController
   end
   
   def create
+    if signed_in? then 
+      redirect_to root_path
+      return
+    end
     @user=User.new(params[:user])
     if @user.save
       sign_in @user
