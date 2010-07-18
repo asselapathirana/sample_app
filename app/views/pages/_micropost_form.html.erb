@@ -1,9 +1,23 @@
 <% form_for @micropost do |f| %>
   <%= f.error_messages %>
   <div class="field">
-    <%= f.text_area :content %>
+    <%= f.text_area :content, :cols=>40, :onKeyPress=>"
+    ct=(139-this.value.length)
+    if (ct<1){
+       var txt='No more characters left.'+'</div>'    ;
+       var class='fieldWithErrors';
+    }else{
+       var txt=ct+' characters left.'+'</div>';
+       var class='fieldWithNoErrors';
+       }
+    document.getElementById('limit').innerHTML =txt;
+    document.getElementById('limitlabel').className=class
+    " %>
+    <div id="limitlabel" class="fieldWithNoErrors">
+      <%= f.label :limit, "Maximum characters per post: 140", :id=>"limit"%>
+    </div>
   </div>
-  <div class="actions">
+    <div class="actions">
     <%= f.submit "Submit" %>
   </div>
 <% end %>

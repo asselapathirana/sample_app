@@ -36,6 +36,7 @@ describe UsersController do
       response.should have_tag("span.content", mp1.content)
       response.should have_tag("span.content", mp2.content)
     end
+   
   end
 
   #Delete these examples and add some real ones
