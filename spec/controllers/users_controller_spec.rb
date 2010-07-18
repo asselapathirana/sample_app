@@ -36,7 +36,7 @@ describe UsersController do
       response.should have_tag("span.content", mp1.content)
       response.should have_tag("span.content", mp2.content)
     end
-   
+
   end
 
   #Delete these examples and add some real ones
@@ -219,7 +219,7 @@ describe UsersController do
       end
     end
   end
-  
+
   describe "GET 'index'" do
 
     describe "for non-signed-in users" do
@@ -310,7 +310,7 @@ describe UsersController do
         response.should redirect_to(users_path)
       end
     end
-   describe "as an admin user" do
+    describe "as an admin user" do
 
       before(:each) do
         @admin = Factory(:user, :email => "admin@example.com", :admin => true)
@@ -326,22 +326,57 @@ describe UsersController do
 
 
   describe "for admin users" do 
-     before(:each) do
-        admin=Factory(:user,:email=>"admin@example.com", :admin=>true)
-        second = Factory(:user, :email => "another@example.com")
-        third  = Factory(:user, :email => "another@example.net")
-       @user = test_sign_in(admin)
-     end
-     it "index should have delete link for non-admin user list" do
-        get :index
-        response.should have_tag("a[href*=?]", /users\/2/i,'delete')
-        response.should have_tag("a[href*=?]", /users\/3/i,'delete')
-     end
-     it "index should NOT have delete link for admin listing" do
-        get :index
-        response.should_not have_tag("a[href*=?]", /users\/1/i,'delete')
-     end
-
+    before(:each) do
+      admin=Factory(:user,:email=>"admin@example.com", :admin=>true)
+      second = Factory(:user, :email => "another@example.com")
+      third  = Factory(:user, :email => "another@example.net")
+      @user = test_sign_in(admin)
+    end
+    it "index should have delete link for non-admin user list" do
+      get :index
+      response.should have_tag("a[href*=?]", /users\/2/i,'delete')
+      response.should have_tag("a[href*=?]", /users\/3/i,'delete')
+    end
+    it "index should NOT have delete link for admin listing" do
+      get :index
+      response.should_not have_tag("a[href*=?]", /users\/1/i,'delete')
+    end
   end 
+  describe "follow pages" do
+
+    describe "when not signed in" do
+
+      it "should protect '/following'" do
+        get :following 
+        response.should redirect_to(signin_path)
+      end
+
+      it "should protect '/followers'" do
+        get :followers
+        response.should redirect_to(signin_path)
+      end
+    end
+
+    describe "when signed in" do
+
+      before(:each) do
+        @user = test_sign_in(Factory(:user))
+        @other_user = Factory(:user, :email => Factory.next(:email))
+        @user.follow!(@other_user)
+      end
+
+      it "should show user following" do
+        get :following, :id => @user.id
+        puts @user.id
+        response.should have_tag("a[href=?]", user_path(@other_user),
+                                 @other_user.name)
+      end
+
+      it "should show user followers" do
+        get :followers, :id => @other_user.id
+        response.should have_tag("a[href=?]", user_path(@user), @user.name)
+      end
+    end
+  end
 end
 

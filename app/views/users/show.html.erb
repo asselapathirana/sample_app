@@ -6,6 +6,8 @@
         <%= gravatar_for @user %>
         <%= h @user.name %>
       </h2>
+      <%= render 'follow_form' if signed_in? %>
+
       <% unless @user.microposts.empty? %>
         <table class="microposts">
            <%= render @microposts %>

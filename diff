@@ -1,0 +1,28 @@
+diff --git a/app/controllers/users_controller.rb b/app/controllers/users_controller.rb
+index c16077b..f403c35 100644
+--- a/app/controllers/users_controller.rb
++++ b/app/controllers/users_controller.rb
+@@ -17,21 +17,18 @@ class UsersController < ApplicationController
+     redirect_to users_path
+   end
+   def new
+-    if signed_in?  then 
+-      redirect_to root_path
+-      return
+-    end
+-  
++    (redirect_to(signin_path); return) if  signed_in?
+     @title="Sign up"
+     @user = User.new
+   end
+-  
++
+   def show
++    (redirect_to(signin_path); return) unless signed_in?
+     @user = User.find(params[:id])
+     @title=CGI.escapeHTML(@user.name)
+     @microposts = @user.microposts.paginate(:page => params[:page])
+   end
+-  
++
+

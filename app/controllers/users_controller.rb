@@ -17,21 +17,20 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
   def new
-    if signed_in?  then 
+    if signed_in? then 
       redirect_to root_path
-      return
+      return 
     end
-  
     @title="Sign up"
     @user = User.new
   end
-  
+
   def show
     @user = User.find(params[:id])
     @title=CGI.escapeHTML(@user.name)
     @microposts = @user.microposts.paginate(:page => params[:page])
   end
-  
+
   def create
     if signed_in? then 
       redirect_to root_path
@@ -61,13 +60,30 @@ class UsersController < ApplicationController
       render :action=>:edit
     end
   end
+ def following
+    (redirect_to(signin_path); return) unless signed_in?
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.following.paginate(:page => params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    (redirect_to(signin_path); return) unless signed_in?
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(:page => params[:page])
+    render 'show_follow'
+  end
+
   private
-     def correct_user
-      @user=User.find(params[:id]) 
-      redirect_to(root_path) unless current_user?(@user)
-    end
-    def admin_user
-      (redirect_to(signin_path); return) unless signed_in?
-      redirect_to(root_path)   unless current_user.admin?
-    end
+  def correct_user
+    @user=User.find(params[:id]) 
+    redirect_to(root_path) unless current_user?(@user)
+  end
+  def admin_user
+    (redirect_to(signin_path); return) unless signed_in?
+    redirect_to(root_path)   unless current_user.admin?
+  end
+ 
 end
