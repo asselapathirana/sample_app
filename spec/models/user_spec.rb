@@ -13,17 +13,17 @@ describe User do
   it "should create a new instance given valid attributes" do
     User.create!(@valid_attributes)
   end
-  
+
   it "should requiire a name" do
     no_name_user = User.new(@valid_attributes.merge(:name=>""))
     no_name_user.should_not be_valid 
   end
-  
+
   it "should require an email address" do
     no_email_user = User.new(@valid_attributes.merge(:email => ""))
     no_email_user.should_not be_valid
   end
-  
+
   it "should reject names that are too long" do
     long_name = "a"*51
     long_name_user=User.new(@valid_attributes.merge(:name=>long_name))
@@ -45,81 +45,81 @@ describe User do
       invalid_email_user.should_not be_valid
     end
   end
-  
+
   it "should reject duplicate email addresses" do
     # Put a user with given email address into the database.
     User.create!(@valid_attributes)
     user_with_duplicate_email = User.new(@valid_attributes)
     user_with_duplicate_email.should_not be_valid
   end
-  
-  
+
+
   it "should reject email addresses identical up to case" do
     upcased_email = @valid_attributes[:email].upcase
     User.create!(@valid_attributes.merge(:email => upcased_email))
     user_with_duplicate_email = User.new(@valid_attributes)
     user_with_duplicate_email.should_not be_valid
   end
-  
+
   describe "password validation" do 
-     it "should require a password" do
+    it "should require a password" do
       User.new(@valid_attributes.merge(:password=>"",:password_confirmation=>"")).should_not be_valid
-     end
-     it "should require a matching password confirmation" do
+    end
+    it "should require a matching password confirmation" do
       User.new(@valid_attributes.merge(:password_confirmation => "foobax")).should_not be_valid
-  end  
-     it "should reject long passwords" do
+    end  
+    it "should reject long passwords" do
       long="a"*41
       hash=@valid_attributes.merge(:password=>long, :password_confirmation=>long)
       User.new(hash).should_not be_valid
-     end
-     
-     it "should reject short passwords" do
+    end
+
+    it "should reject short passwords" do
       short="a"*4
       hash=@valid_attributes.merge(:password=>short, :password_confirmation=>short)
       User.new(hash).should_not be_valid
-     end
-   end
-   
-   describe "password encryption" do
-      before(:each) do
-        @user=User.create!(@valid_attributes)
-      end
+    end
+  end
 
-      it "should have an encrypted password attribute" do
-        @user.should respond_to(:encrypted_password)
-      end
+  describe "password encryption" do
+    before(:each) do
+      @user=User.create!(@valid_attributes)
+    end
 
-      it "should set the encrypted password" do
-        @user.encrypted_password.should_not be_blank
+    it "should have an encrypted password attribute" do
+      @user.should respond_to(:encrypted_password)
+    end
+
+    it "should set the encrypted password" do
+      @user.encrypted_password.should_not be_blank
+    end
+    describe "has_password? method" do
+      it "should be true if passwords match" do
+        @user.has_password?(@valid_attributes[:password]).should be_true
       end
-      describe "has_password? method" do
-        it "should be true if passwords match" do
-          @user.has_password?(@valid_attributes[:password]).should be_true
+      it "should be false if passwords don't match" do
+        @user.has_password?("foobax").should be_false
+      end
+      describe "authenticate method" do
+
+        it "should return nil on email/password mismatch" do
+          wrong_password_user = User.authenticate(@valid_attributes[:email], "wrongpass")
+          wrong_password_user.should be_nil
         end
-        it "should be false if passwords don't match" do
-          @user.has_password?("foobax").should be_false
+
+        it "should return nil for an email address with no user" do
+          nonexistent_user = User.authenticate("bar@foo.com", @valid_attributes[:password])
+          nonexistent_user.should be_nil
         end
-        describe "authenticate method" do
 
-      it "should return nil on email/password mismatch" do
-        wrong_password_user = User.authenticate(@valid_attributes[:email], "wrongpass")
-        wrong_password_user.should be_nil
-      end
-
-      it "should return nil for an email address with no user" do
-        nonexistent_user = User.authenticate("bar@foo.com", @valid_attributes[:password])
-        nonexistent_user.should be_nil
-      end
-
-      it "should return the user on email/password match" do
-        matching_user = User.authenticate(@valid_attributes[:email], @valid_attributes[:password])
-        matching_user.should == @user
+        it "should return the user on email/password match" do
+          matching_user = User.authenticate(@valid_attributes[:email], @valid_attributes[:password])
+          matching_user.should == @user
+        end
       end
     end
-    end
-   end
-   describe "remember me" do
+  end
+  describe "remember me" do
     before(:each) do
       @user=User.create!(@valid_attributes)
     end
@@ -132,8 +132,8 @@ describe User do
     #it "should set the remember token" do
     #  @user.remember_me!
     #  @user.remember_token.should_not be_nil
-   end
-     describe "admin attribute" do
+  end
+  describe "admin attribute" do
 
     before(:each) do
       @user = User.create!(@valid_attributes)
@@ -185,23 +185,90 @@ describe User do
         Micropost.find_by_id(micropost.id).should be_nil
       end
     end
- describe "status feed " do 
-   it "should have a feed" do
-      @user.should respond_to(:feed)
-   end
+    describe "status feed " do 
+      it "should have a feed" do
+        @user.should respond_to(:feed)
+      end
 
-   it "should include the user's microposts" do
-     @user.feed.include?(@mp1).should be_true
-     @user.feed.include?(@mp2).should be_true
-   end
+      it "should include the user's microposts" do
+        @user.feed.include?(@mp1).should be_true
+        @user.feed.include?(@mp2).should be_true
+      end
 
-   it "should not include a different user's microposts" do
-     mp3 = Factory(:micropost,
-                   :user => Factory(:user, :email => Factory.next(:email)))
-     @user.feed.include?(mp3).should be_false
-   end
+      it "should not include a different user's microposts" do
+        mp3 = Factory(:micropost,
+                      :user => Factory(:user, :email => Factory.next(:email)))
+        @user.feed.include?(mp3).should be_false
+      end
 
 
- end
+    end
+  end
+
+  describe "relationships" do
+    before(:each) do
+      @user = User.create!(@valid_attributes)
+      @followed=Factory(:user)
+    end
+
+    it "should have a relationships method" do
+      @user.should respond_to(:relationships)
+    end
+  end
+
+  describe "relationships" do
+
+    before(:each) do
+      @user = User.create!(@valid_attributes)
+      @followed = Factory(:user)
+    end
+
+    it "should have a relationships method" do
+      @user.should respond_to(:relationships)
+    end
+
+    it "should have a following method" do
+      @user.should respond_to(:following)
+    end
+    it "should have a following? method" do
+      @user.should respond_to(:following?)
+    end
+
+    it "should have a follow! method" do
+      @user.should respond_to(:follow!)
+    end
+
+    it "should follow another user" do
+      @user.follow!(@followed)
+      @user.should be_following(@followed)
+    end
+
+    it "should include the followed user in the following array" do
+      @user.follow!(@followed)
+      @user.following.include?(@followed).should be_true
+    end
+    it "should have an unfollow! method" do
+      @followed.should respond_to(:unfollow!)
+    end
+
+    it "should unfollow a user" do
+      @user.follow!(@followed)
+      @user.should be_following(@followed)
+      @user.unfollow!(@followed)
+      @user.should_not be_following(@followed)
+    end
+    it "should have a reverse_relationships method" do
+      @user.should respond_to(:reverse_relationships)
+    end
+
+    it "should have a followers method" do
+      @user.should respond_to(:followers)
+    end
+
+    it "should include the follower in the followers array" do
+      @user.follow!(@followed)
+      @followed.followers.include?(@user).should be_true
+    end
+
   end
 end
