@@ -70,7 +70,8 @@ class User < ActiveRecord::Base
 
   def feed
     # this is preliminary. Later we'll add followed feeds
-    Micropost.all(:conditions=> ["user_id=?",id])
+    #Micropost.all(:conditions=> ["user_id=?",id])
+    Micropost.from_users_followed_by(self)
   end
 
   private
